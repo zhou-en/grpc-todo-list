@@ -1,6 +1,6 @@
 syntax = "proto3";
 package v1;
-option go_package = "./";
+option go_package = "./;v1";
 
 import "google/protobuf/timestamp.proto";
 
@@ -71,16 +71,36 @@ message DeleteResponse {
     int64 deleted = 2;
 }
 
-message ReadAllResponse {
+// Request data to read all todo task
+message ReadAllRequest{
+    // API versioning: it is my best practice to specify version explicitly
     string api = 1;
-    repeated ToDo ToDos = 2;
+}
+
+// Contains list of all todo tasks
+message ReadAllResponse{
+    // API versioning: it is my best practice to specify version explicitly
+    string api = 1;
+
+    // List of all todo tasks
+    repeated ToDo toDos = 2;
 }
 
 // Service to manage list of todo tasks
 service ToDoService {
     // Create new todo task
     rpc Create(CreateRequest) returns (CreateResponse);
+
+    // Read todo task
     rpc Read(ReadRequest) returns (ReadResponse);
+
+    // Update todo task
     rpc Update(UpdateRequest) returns (UpdateResponse);
+
+    // Delete todo task
     rpc Delete(DeleteRequest) returns (DeleteResponse);
+
+    // Read all todo tasks
+    rpc ReadAll(ReadAllRequest) returns (ReadAllResponse);
 }
+

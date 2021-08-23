@@ -8,6 +8,15 @@ option go_package = "./";
 
 ## Generate go code from proto
 ```sh
-protoc --proto_path=api/proto/v1 --go_out=pkg/api/v1 todo-service.proto
+protoc --proto_path=api/proto/v1 --proto_path=third_party --go_out=plugins=grpc:pkg/api/v1 todo-service.proto
 ```
 
+### Create database table:
+```sql
+CREATE TABLE ToDo (
+    ID serial primary key unique,
+    Title varchar (200) DEFAULT NULL,
+    Description varchar(1024) DEFAULT NULL,
+    Reminder timestamp NULL DEFAULT NULL
+  );
+```
