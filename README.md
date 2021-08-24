@@ -14,9 +14,9 @@ protoc --proto_path=api/proto/v1 --proto_path=third_party --go_out=plugins=grpc:
 ### Create database table:
 ```sql
 CREATE TABLE ToDo (
-    ID serial primary key unique,
+    ID serial primary key ,
     Title varchar (200) DEFAULT NULL,
     Description varchar(1024) DEFAULT NULL,
     Reminder timestamp NULL DEFAULT NULL
-  );
+);
 ```

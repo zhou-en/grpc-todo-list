@@ -46,7 +46,7 @@ func (s *toDoServiceServer) Create(ctx context.Context, req *v1.CreateRequest) (
 	//res, err := c.ExecContext(ctx, `INSERT INTO "ToDo" ("Title", "Description", "Reminder") VALUES($1, $2, $3)`,
 	//	req.ToDo.Title, req.ToDo.Description, reminder)
 	//
-	err = s.db.QueryRow(`INSERT INTO "ToDo" ("Title", "Description", "Reminder") VALUES($1, $2, $3) RETURNING "ID"`, req.ToDo.Title, req.ToDo.Description, reminder).Scan(&lastInsertId)
+	err = s.db.QueryRow(`INSERT INTO ToDo (Title, Description, Reminder) VALUES($1, $2, $3) RETURNING ID`, req.ToDo.Title, req.ToDo.Description, reminder).Scan(&lastInsertId)
 
 
 	if err != nil {
@@ -70,7 +70,7 @@ func (s *toDoServiceServer) Read(ctx context.Context, req *v1.ReadRequest) (*v1.
 		return nil, err
 	}
 	// query todo
-	rows, err := c.QueryContext(ctx, `SELECT "ID", "Title", "Description", "Reminder" FROM "ToDo" WHERE "ID"=$1`, req.Id)
+	rows, err := c.QueryContext(ctx, `SELECT ID, Title, Description, Reminder FROM ToDo WHERE ID=$1`, req.Id)
 	if err != nil {
 		return nil, status.Error(codes.Unknown, "failed to select from ToDo table -> " + err.Error())
 	}
@@ -120,7 +120,7 @@ func (s *toDoServiceServer) Update(ctx context.Context, req *v1.UpdateRequest) (
 	}
 
 	// update todo
-	sqlQuery := `UPDATE "ToDo" SET "Title"=$1, "Description"=$2, "Reminder"=$3 WHERE "ID"=$4;`
+	sqlQuery := `UPDATE ToDo SET Title=$1, Description=$2, Reminder=$3 WHERE ID=$4;`
 	res, err := c.ExecContext(ctx, sqlQuery, req.ToDo.Title, req.ToDo.Description, reminder, req.ToDo.Id)
 	if err != nil {
 		return nil, status.Error(codes.Unknown, "failed to update ToDo -> " + err.Error())
@@ -153,7 +153,7 @@ func (s *toDoServiceServer) Delete(ctx context.Context, req *v1.DeleteRequest) (
 	defer c.Close()
 
 	// delete ToDo
-	deleteQuery := `DELETE FROM "ToDo" WHERE "ID"=$1`
+	deleteQuery := `DELETE FROM ToDo WHERE ID=$1`
 	res, err := c.ExecContext(ctx, deleteQuery, req.Id)
 	if err != nil {
 		return nil, status.Error(codes.Unknown, "failed to delete ToDo -> " + err.Error())
@@ -184,7 +184,7 @@ func (s *toDoServiceServer) ReadAll(ctx context.Context, req *v1.ReadAllRequest)
 	}
 	defer c.Close()
 
-	allQuery := `SELECT "ID", "Title", "Description", "Reminder" FROM "ToDo";`
+	allQuery := `SELECT ID, Title, Description, Reminder FROM ToDo;`
 	rows, err := c.QueryContext(ctx, allQuery)
 	if err != nil {
 		return nil, status.Error(codes.Unknown, "failed to select from ToDo -> " + err.Error())
