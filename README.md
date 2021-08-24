@@ -1,7 +1,7 @@
 # grpc-todo-list
 https://medium.com/@amsokol.com/tutorial-how-to-develop-go-grpc-microservice-with-http-rest-endpoint-middleware-kubernetes-daebb36a97e9
 
-## Add import path to `api/proto/v1/todo-service.proto``:
+## Add import path to `api/proto/v1/todo-service.proto`:
 ```protobuf
 option go_package = "./";
 ```
